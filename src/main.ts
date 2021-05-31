@@ -426,7 +426,7 @@ Apify.main(async () => {
                         getPostInfoFromScript(page, canonical),
                         getPostContent(page),
                     ]);
-
+                    log.debug(`Buhu in ${content}`);
                     await map.append(username, async (value) => {
                         return {
                             ...value,
