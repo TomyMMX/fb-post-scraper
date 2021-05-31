@@ -8,7 +8,7 @@ import {
     isNotFoundPage,
 } from './page';
 import { statePersistor, emptyState } from './storage';
-import type { Schema, FbLabel, FbSection, FbPage } from './definitions';
+import type { Schema, FbLabel, FbPage } from './definitions';
 
 import LANGUAGES = require('./languages.json');
 
@@ -128,38 +128,6 @@ Apify.main(async () => {
         throw new Error('No requests were loaded from startUrls');
     }
 
-    const initSubPage = async (subpage: { url: string; section: FbSection, useMobile: boolean }, url: string) => {
-        if (subpage.section === 'home') {
-            const username = extractUsernameFromUrl(subpage.url);
-
-            // initialize the page. if it's already initialized,
-            // use the current content
-            await map.append(username, async (value) => {
-                return {
-                    ...emptyState(),
-                    pageUrl: normalizeOutputPageUrl(subpage.url),
-                    '#url': subpage.url,
-                    '#ref': url,
-                    ...value,
-                };
-            });
-        }
-
-        await requestQueue.addRequest({
-            url: subpage.url,
-            userData: {
-                label: LABELS.PAGE,
-                sub: subpage.section,
-                ref: url,
-                useMobile: subpage.useMobile,
-            },
-        }, { forefront: true });
-    };
-
-    const pageInfo = [
-        ...(scrapePosts ? ['posts'] : [])
-    ] as FbSection[];
-
     const addPageSearch = createAddPageSearch(requestQueue);
 
     for (const request of processedRequests) {
@@ -183,9 +151,6 @@ Apify.main(async () => {
                         canonical: storyFbToDesktopPermalink(url)?.toString(),
                     },
                 });
-
-                // this is for home
-                //await initSubPage(generateSubpagesFromUrl(url, [])[0], url);
             }
         } catch (e) {
             if (e instanceof InfoError) {
@@ -503,7 +468,8 @@ Apify.main(async () => {
     const finished = new Date().toISOString();
 
     // generate the dataset from all the crawled pages
-    await Apify.pushData([...state.values()].filter(s => s.categories?.length).map(val => ({
+    //.filter(s => s.categories?.length)
+    await Apify.pushData([...state.values()].map(val => ({
         ...val,
         "#version": 3, // current data format version
         '#finishedAt': finished,
