@@ -1,6 +1,6 @@
 {
     "title": "facebook-page-crawler",
-    "description": "Extract public profile information from Facebook pages and service listings. The actor scrapes data from Facebook posts, comments, reviews, and more.",
+    "description": "Extract public profile information from Facebook pages and service listings. The actor scrapes data from Facebook posts",
     "type": "object",
     "schemaVersion": 1,
     "properties": {
@@ -249,33 +249,7 @@
                 "日本語(関西)"
             ]
         },
-        "searchPages": {
-            "title": "Search pages",
-            "description": "Search pages from the public directory",
-            "type": "array",
-            "example": [
-                "restaurant New York"
-            ],
-            "default": [],
-            "editor": "stringList"
-        },
-        "searchLimit": {
-            "title": "Max search results",
-            "description": "Limit the max number of results to return",
-            "type": "integer",
-            "default": 10,
-            "prefill": 10,
-            "editor": "number"
-        },
-        "commentsMode": {
-            "title": "Comments mode",
-            "description": "Choose the way the comments are sorted",
-            "type": "string",
-            "default": "RANKED_THREADED",
-            "editor": "select",
-            "enum": ["RANKED_THREADED", "RECENT_ACTIVITY", "RANKED_UNFILTERED"],
-            "enumTitles": ["Most relevant", "Newest first", "Non-filtered"]
-        },
+
         "maxPosts": {
             "title": "Max posts",
             "description": "Limit the max number of posts to return",
@@ -284,86 +258,7 @@
             "prefill": 3,
             "editor": "number"
         },
-        "minPosts": {
-            "title": "Minimum post count",
-            "description": "What is the expected minimum number of posts before considering it a successful run",
-            "type": "integer",
-            "default": 0,
-            "editor": "number"
-        },
-        "maxPostDate": {
-            "title": "Max post date",
-            "description": "Posts are retrieved from newest to oldest. Use this setting to limit how many posts in the past it should fetch.",
-            "example": "3 days",
-            "pattern": "^(today|yesterday|\\d+\\s?(minute|second|day|hour|month|year|week)s?|\\d{4}\\-\\d{2}\\-\\d{2}(\\s\\d{2}\\:\\d{2}\\:\\d{2})?)$",
-            "type": "string",
-            "editor": "textfield"
-        },
-        "minPostDate": {
-            "title": "Min post date",
-            "description": "Set the minimum post date, remembering that posts start from newest to oldest, it will skip the newest posts up to the specified date",
-            "example": "2020-01-01",
-            "pattern": "^(today|yesterday|\\d+\\s?(minute|second|day|hour|month|year|week)s?|\\d{4}\\-\\d{2}\\-\\d{2}(\\s\\d{2}\\:\\d{2}\\:\\d{2})?)$",
-            "type": "string",
-            "editor": "textfield"
-        },
-        "maxPostComments": {
-            "title": "Max comments",
-            "description": "Limit the max comments per post to return",
-            "type": "integer",
-            "default": 15,
-            "prefill": 15,
-            "editor": "number"
-        },
-        "minPostComments": {
-            "title": "Minimum post comments",
-            "description": "What is the expected minimum number of comments in each post before considering it a successful run",
-            "type": "integer",
-            "default": 0,
-            "editor": "number"
-        },
-        "maxCommentDate": {
-            "title": "Minimum comment date",
-            "description": "Limit the minimum date for comments",
-            "example": "2020-01-01",
-            "pattern": "^(today|yesterday|\\d+\\s?(minute|second|day|hour|month|year|week)s?|\\d{4}\\-\\d{2}\\-\\d{2}(\\s\\d{2}\\:\\d{2}\\:\\d{2})?)$",
-            "type": "string",
-            "editor": "textfield"
-        },
-        "maxReviews": {
-            "title": "Max reviews",
-            "description": "Limit the max number of reviews to return",
-            "type": "integer",
-            "default": 3,
-            "prefill": 3,
-            "editor": "number"
-        },
-        "maxReviewDate": {
-            "title": "Max review date",
-            "description": "Limit the date of the reviews",
-            "example": "2020-01-01",
-            "pattern": "^(today|yesterday|\\d+\\s?(minute|second|day|hour|month|year|week)s?|\\d{4}\\-\\d{2}\\-\\d{2}(\\s\\d{2}\\:\\d{2}\\:\\d{2})?)$",
-            "type": "string",
-            "editor": "textfield"
-        },
-        "scrapeAbout": {
-            "title": "About",
-            "editor": "checkbox",
-            "description": "Get the About page if exists",
-            "default": true,
-            "example": true,
-            "type": "boolean",
-            "groupCaption": "Sections to scrape",
-            "groupDescription": "Mark the sections you want to include in your dataset"
-        },
-        "scrapeReviews": {
-            "title": "Reviews",
-            "editor": "checkbox",
-            "description": "Get the Reviews if it exists",
-            "default": true,
-            "example": true,
-            "type": "boolean"
-        },
+
         "scrapePosts": {
             "title": "Posts",
             "description": "Get the Posts",
@@ -372,14 +267,7 @@
             "type": "boolean",
             "editor": "checkbox"
         },
-        "scrapeServices": {
-            "title": "Services",
-            "description": "Get the Services if it exists",
-            "default": true,
-            "example": true,
-            "type": "boolean",
-            "editor": "checkbox"
-        },
+
         "proxyConfiguration": {
             "title": "Proxy configuration",
             "type": "object",
@@ -392,31 +280,6 @@
                 "apifyProxyGroups": ["RESIDENTIAL"]
             },
             "editor": "proxy"
-        },
-        "extendOutputFunction": {
-            "title": "Extend output function",
-            "type": "string",
-            "editor": "javascript",
-            "description": "Extend the output item to contain more fields. The raw data is present in the 'data' variable.",
-            "prefill": "({ data, item, customData, Apify }) => {\n    return item;\n}",
-            "sectionCaption": "Extend scraper functionality",
-            "sectionDescription": "You can change the output of the items for your dataset here, or add additional behavior on the scraper."
-        },
-        "extendScraperFunction": {
-            "title": "Extend Scraper Function",
-            "description": "Advanced function that allows you to extend the default scraper functionality, allowing you to manually perform actions on the page",
-            "type": "string",
-            "default": "",
-            "prefill": "async ({ page, LABELS, label, request, username, map, fns, customData, Apify }) => {\n    if (label === 'HANDLE') {\n        // this is inside the handlePageFunction\n    } else if (label === 'SETUP') {\n        // before starting the crawler\n    } else if (label === 'FINISH') {\n        // after finishing the crawler\n    }\n}",
-            "editor": "javascript"
-        },
-        "customData": {
-            "title": "Custom data",
-            "description": "Any data that you want to have available inside the Extend Output/Scraper Function",
-            "default": {},
-            "prefill": {},
-            "type": "object",
-            "editor": "json"
         },
         "sessionStorage": {
             "title": "Session storage",
