@@ -657,33 +657,28 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
         const postText = userContent.innerText.trim();
         const images: HTMLImageElement[] = Array.from(el.querySelectorAll('img[src*="scontent"]'));
         const links: HTMLAnchorElement[] = Array.from(el.querySelectorAll('[href*="l.facebook.com/l.php?u="]'));
-
+        const userImg: string | null = (<HTMLElement>userContent.parentElement?.firstChild)?.querySelector('[role="img"]')?.getAttribute('src') || null
         const acc: FbPostLink[] = new Array;
         const postLinks: FbPostLink[] = links.filter(link => link.href).reduce((ret, link) => {
             const url = new URL(link.href).searchParams.get('u');
             if (url) {
                 const curUrl = ret.find(l => l.url === url);
 
-                const img: HTMLImageElement|null = link.querySelector('.scaledImageFitWidth');
-                const imgUrl = img?.src || null;
-                const linkText = link.querySelector('.accessible_elem')?.innerHTML || null;
-
+                const imgUrl = link.querySelector('.scaledImageFitWidth')?.getAttribute('src') || null;
                 const linkDomain = link.parentElement?.parentElement?.querySelector('.ellipsis')?.innerHTML || null;
                 const linkTitle = link.getAttribute('aria-label') || null;
+                const linkText = link.querySelector('.accessible_elem')?.innerHTML || null;
 
                 if (curUrl) {
                     if (curUrl.imageUrl === null) {
                         curUrl.imageUrl = imgUrl;
                     }
-
                     if (curUrl.text === null) {
                         curUrl.text = linkText;
                     }
-
                     if (curUrl.domain === null) {
                         curUrl.domain = linkDomain;
                     }
-
                     if (curUrl.title === null) {
                         curUrl.title = linkTitle;
                     }
@@ -702,6 +697,7 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
         }, acc);
 
         return {
+            logoUrl: userImg,
             postDate,
             postText,
             postImages: images.filter(img => img.closest('a[rel="theater"]') && img.src).map((img) => {
@@ -719,6 +715,14 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
         postDate: convertDate(content.postDate, true),
         postUrl: page.url(),
     };
+};
+
+export const getUserLogoUrl = async (page: Page): Promise<string> => {
+    await page.waitForSelector(CSS_SELECTORS.POST_CONTAINER);
+
+
+
+    return '';
 };
 
 /**

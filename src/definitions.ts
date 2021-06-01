@@ -134,7 +134,7 @@ export interface FbPost {
     postImages: FbImage[];
     postLinks: FbPostLink[];
     name: string;
-    logoUrl: string;
+    logoUrl: string | null;
 }
 
 export interface FbService {

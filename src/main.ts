@@ -5,6 +5,7 @@ import * as fns from './functions';
 import {
     getPostContent,
     getPostInfoFromScript,
+    getUserLogoUrl,
     isNotFoundPage,
 } from './page';
 import { statePersistor, emptyState } from './storage';
@@ -387,9 +388,10 @@ Apify.main(async () => {
                     // mobile address
                     const { username, canonical } = userData;
 
-                    var [postStats, content] = await Promise.all([
+                    var [postStats, content, logoImg] = await Promise.all([
                         getPostInfoFromScript(page, canonical),
                         getPostContent(page),
+                        getUserLogoUrl(page),
                     ]);
 
                     content = {
