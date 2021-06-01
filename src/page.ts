@@ -663,12 +663,19 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
             const url = new URL(link.href).searchParams.get('u');
             if (url) {
                 const curUrl = ret.find(l => l.url === url);
+
                 const img: HTMLImageElement|null = link.querySelector('.scaledImageFitWidth');
                 const imgUrl = img?.src || null;
+                const linkText = link.querySelector('.accessible_elem')?.innerHTML || null;
+
 
                 if (curUrl) {
                     if (curUrl.imageUrl === null) {
                         curUrl.imageUrl = imgUrl;
+                    }
+
+                    if (curUrl.text === null) {
+                        curUrl.text = linkText;
                     }
                 } else {
                     const newUrl: FbPostLink = {
@@ -676,7 +683,7 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
                         imageUrl: imgUrl,
                         domain: '',
                         title: '',
-                        text: ''
+                        text: linkText
                     }
                     ret.push(newUrl);
                 }
