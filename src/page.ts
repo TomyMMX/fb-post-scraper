@@ -725,19 +725,27 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
 export const getVideoUrl = async (page: Page): Promise<string|null> => {
     await page.waitForSelector('.widePic');
 
-    return await page.$eval('#viewport', async (el): Promise<string|null> => {
-        const firstPlayButton: HTMLElement|null = el.querySelector('.widePic > div > div') || null;
+    const playClicked =  await page.$eval('#viewport', async (el): Promise<boolean> => {
+        const firstPlayButton = el.querySelector<HTMLDivElement>('.widePic > div > div');
 
         if (firstPlayButton) {
-            await page.click('.widePic > div > div');
-            const videoContainer = firstPlayButton.parentElement;
-            if (videoContainer) {
-                return videoContainer.querySelector('video')?.src || null;
-            }
+            firstPlayButton.click();
+            log.debug('Clicked play...');
+            return true;
         }
-        return null;
 
+        return false;
     });
+
+    if (playClicked) {
+        await page.waitForSelector('video');
+        log.debug('Video found...');
+        return await page.$eval('#viewport', async (el): Promise<string|null> => {
+            return el.querySelector('video')?.src || null;
+        });
+    }
+
+    return null;
 };
 
 /**
