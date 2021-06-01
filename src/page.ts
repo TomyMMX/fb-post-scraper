@@ -658,7 +658,7 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
         const images: HTMLImageElement[] = Array.from(el.querySelectorAll('img[src*="scontent"]'));
         const links: HTMLAnchorElement[] = Array.from(el.querySelectorAll('[href*="l.facebook.com/l.php?u="]'));
         const userImg: string | null = (<HTMLElement>userContent.parentElement?.firstChild)?.querySelector('[role="img"]')?.getAttribute('src') || null;
-        const postHeaderLinks: HTMLAnchorElement[] = Array.from((<HTMLElement>userContent.parentElement?.firstChild)?.querySelectorAll('a[href=*]'));
+        const postHeaderLinks: HTMLAnchorElement[] = Array.from((<HTMLElement>userContent.parentElement?.firstChild)?.querySelectorAll('a'));
         const userName: string | null = postHeaderLinks.find(a => !a.innerText.startsWith('<'))?.innerText || null;
         const acc: FbPostLink[] = new Array;
         const postLinks: FbPostLink[] = links.filter(link => link.href).reduce((ret, link) => {
