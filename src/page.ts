@@ -659,26 +659,23 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
         const links: HTMLAnchorElement[] = Array.from(el.querySelectorAll('[href*="l.facebook.com/l.php?u="]'));
         const header: HTMLElement = <HTMLElement>userContent.parentElement?.firstChild
         const userImg: string | null = header?.querySelector('[role="img"]')?.getAttribute('src') || null;
-
-
         const userName: string | null = Array.from(header?.querySelectorAll('a')).find(a => a.innerText)?.innerText || null;
+        const hasVideo: boolean = userContent.querySelector('video') ? true : false;
+
         const acc: FbPostLink[] = new Array;
         const postLinks: FbPostLink[] = links.filter(link => link.href).reduce((ret, link) => {
             const url = new URL(link.href).searchParams.get('u');
             if (url) {
                 const curUrl = ret.find(l => l.url === url);
 
-                const imgUrl = link.querySelector('.scaledImageFitWidth')?.getAttribute('src') || null;
+                const thumbUrl = link.querySelector('.scaledImageFitWidth')?.getAttribute('src') || null;
                 const linkDomain = link.parentElement?.parentElement?.querySelector('.ellipsis')?.innerHTML || null;
                 const linkTitle = link.getAttribute('aria-label') || null;
                 const linkText = link.querySelector('.accessible_elem')?.innerHTML || null;
 
                 if (curUrl) {
-                    if (curUrl.imageUrl === null) {
-                        curUrl.imageUrl = imgUrl;
-                    }
-                    if (curUrl.text === null) {
-                        curUrl.text = linkText;
+                    if (curUrl.thumbUrl === null) {
+                        curUrl.thumbUrl = thumbUrl;
                     }
                     if (curUrl.domain === null) {
                         curUrl.domain = linkDomain;
@@ -686,10 +683,13 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
                     if (curUrl.title === null) {
                         curUrl.title = linkTitle;
                     }
+                    if (curUrl.text === null) {
+                        curUrl.text = linkText;
+                    }
                 } else {
                     const newUrl: FbPostLink = {
                         url: url,
-                        imageUrl: imgUrl,
+                        thumbUrl: thumbUrl,
                         domain: linkDomain,
                         title: linkTitle,
                         text: linkText
@@ -711,7 +711,8 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
                     image: img.src,
                 };
             }),
-            postLinks: postLinks
+            postLinks: postLinks,
+            hasVideo: hasVideo
         };
     });
 

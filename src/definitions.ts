@@ -116,7 +116,7 @@ export interface FbImage {
 
 export interface FbPostLink {
     url: string;
-    imageUrl: string | null;
+    thumbUrl: string | null;
     domain: string | null;
     title: string | null;
     text: string | null;
@@ -135,6 +135,7 @@ export interface FbPost {
     postLinks: FbPostLink[];
     name: string | null;
     logoUrl: string | null;
+    hasVideo: boolean;
 }
 
 export interface FbService {
