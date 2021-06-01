@@ -152,6 +152,7 @@ Apify.main(async () => {
         }
     }
 
+    const maxConcurrency = process.env?.MAX_CONCURRENCY ? +process.env.MAX_CONCURRENCY : undefined;
     const cache = resourceCache([
         /rsrc\.php/,
     ]);
@@ -161,15 +162,16 @@ Apify.main(async () => {
         useSessionPool: true,
         sessionPoolOptions: {
             maxPoolSize: 1,
+            sessionOptions: {
+                maxErrorScore: 0.5,
+            },
         },
         maxRequestRetries: 5,
-        maxConcurrency: 2,
+        maxConcurrency,
         proxyConfiguration: proxyConfig,
         launchContext: {
-            useChrome: true,
-            stealth: true,
+            stealth: useStealth,
             launchOptions: {
-                headless: true,
                 devtools: debugLog,
                 useIncognitoPages: true,
             },
@@ -177,7 +179,7 @@ Apify.main(async () => {
         browserPoolOptions: {
             maxOpenPagesPerBrowser: 2, // required to use one IP per tab
         },
-        persistCookiesPerSession: sessionStorage !== '',
+        persistCookiesPerSession: false,
         handlePageTimeoutSecs, // more comments, less concurrency
         preNavigationHooks: [async ({ page, request }, gotoOptions) => {
             gotoOptions.waitUntil = request.userData.label === LABELS.POST || (request.userData.label === LABELS.PAGE && ['posts', 'reviews'].includes(request.userData.sub))
