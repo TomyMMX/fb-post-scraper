@@ -669,6 +669,7 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
                 const linkText = link.querySelector('.accessible_elem')?.innerHTML || null;
 
                 const linkDomain = link.parentElement?.parentElement?.querySelector('.ellipsis')?.innerHTML || null;
+                const linkTitle = link.getAttribute('aria-label') || null;
 
                 if (curUrl) {
                     if (curUrl.imageUrl === null) {
@@ -682,12 +683,16 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
                     if (curUrl.domain === null) {
                         curUrl.domain = linkDomain;
                     }
+
+                    if (curUrl.title === null) {
+                        curUrl.title = linkTitle;
+                    }
                 } else {
                     const newUrl: FbPostLink = {
                         url: url,
                         imageUrl: imgUrl,
                         domain: linkDomain,
-                        title: '',
+                        title: linkTitle,
                         text: linkText
                     }
                     ret.push(newUrl);
