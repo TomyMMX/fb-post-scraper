@@ -67,6 +67,7 @@ export const getPostInfoFromScript = async (page: Page, url: string) => {
  */
 export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
     await page.waitForSelector(CSS_SELECTORS.POST_CONTAINER);
+    await page.waitForSelector('.userContent');
 
     const content = await page.$eval(CSS_SELECTORS.POST_CONTAINER, async (el): Promise<Partial<FbPost>> => {
         const postDate = (el.querySelector('[data-utime]') as HTMLDivElement)?.dataset?.utime;
@@ -84,7 +85,6 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
         const header: HTMLElement = <HTMLElement>userContent.parentElement?.firstChild
         const userImg: string | null = header?.querySelector('[role="img"]')?.getAttribute('src') || null;
         const userName: string | null = Array.from(header?.querySelectorAll('a')).find(a => a.innerText)?.innerText || null;
-        const hasVideo: boolean = userContent.querySelector('video') ? true : false;
 
         const acc: FbPostLink[] = new Array;
         const postLinks: FbPostLink[] = links.filter(link => link.href).reduce((ret, link) => {
