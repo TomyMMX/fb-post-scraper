@@ -394,7 +394,7 @@ Apify.main(async () => {
                             ... value,
                             postVideos: [
                                 {
-                                    link: videoUrl
+                                    videoUrl: videoUrl
                                 }
                             ]
                         }
