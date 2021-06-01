@@ -192,7 +192,7 @@ Apify.main(async () => {
                     console.log(...args); // eslint-disable-line no-console
                 });
             });
-/*
+
             await page.exposeFunction('unhideChildren', (element?: HTMLElement) => {
                 // weird bugs happen in this function, sometimes the dom element has no querySelectorAll for
                 // unknown reasons
@@ -216,7 +216,7 @@ Apify.main(async () => {
                     }
                 }
             });
-*/
+
             await cache(page);
 
             // make the page a little more lightweight
