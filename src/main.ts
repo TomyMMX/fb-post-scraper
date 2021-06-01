@@ -177,14 +177,12 @@ Apify.main(async () => {
             },
         },
         browserPoolOptions: {
-            maxOpenPagesPerBrowser: 2, // required to use one IP per tab
+            maxOpenPagesPerBrowser: 2,
         },
         persistCookiesPerSession: false,
         handlePageTimeoutSecs, // more comments, less concurrency
         preNavigationHooks: [async ({ page, request }, gotoOptions) => {
-            gotoOptions.waitUntil = request.userData.label === LABELS.POST || (request.userData.label === LABELS.PAGE && ['posts', 'reviews'].includes(request.userData.sub))
-                ? 'load'
-                : 'domcontentloaded';
+            gotoOptions.waitUntil = 'domcontentloaded';
             gotoOptions.timeout = 60000;
 
             await setLanguageCodeToCookie(language, page);
@@ -194,7 +192,7 @@ Apify.main(async () => {
                     console.log(...args); // eslint-disable-line no-console
                 });
             });
-
+/*
             await page.exposeFunction('unhideChildren', (element?: HTMLElement) => {
                 // weird bugs happen in this function, sometimes the dom element has no querySelectorAll for
                 // unknown reasons
@@ -218,7 +216,7 @@ Apify.main(async () => {
                     }
                 }
             });
-
+*/
             await cache(page);
 
             // make the page a little more lightweight
