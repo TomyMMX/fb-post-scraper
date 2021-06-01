@@ -8,7 +8,7 @@ import {
     isNotFoundPage,
 } from './page';
 import { statePersistor, emptyState } from './storage';
-import type { Schema, FbLabel, FbPage } from './definitions';
+import type { Schema, FbLabel, FbPost } from './definitions';
 
 import LANGUAGES = require('./languages.json');
 
@@ -387,23 +387,17 @@ Apify.main(async () => {
                     // mobile address
                     const { username, canonical } = userData;
 
-                    const [postStats, content] = await Promise.all([
+                    var [postStats, content] = await Promise.all([
                         getPostInfoFromScript(page, canonical),
                         getPostContent(page),
                     ]);
-                    log.debug(`Buhu in ${JSON.stringify(content)}`);
-                    await map.append(username, async (value) => {
-                        return {
-                            ...value,
-                            posts: [
-                                {
-                                    ...content,
-                                    postStats
-                                },
-                                ...(value?.posts ?? []),
-                            ],
-                        } as Partial<FbPage>;
-                    });
+
+                    content = {
+                        ... content,
+                        postStats
+                    }
+
+                    await map.write(username, content);
 
                     log.info(`Processed post in ${postTimer() / 1000}s`, { url: request.url });
                 }

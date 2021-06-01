@@ -43,18 +43,11 @@ export interface Schema {
     startUrls: Array<string | { url: string }>;
     proxyConfiguration?: any;
     maxPosts?: number;
-
-
-
-
     scrapePosts?: boolean;
-
     language?: string;
-
     sessionStorage?: string;
     useStealth?: boolean;
     debugLog?: boolean;
-
 }
 
 export interface FbPageInfo {
@@ -126,7 +119,7 @@ export interface FbPost {
     postText: string;
     postUrl: string;
     postStats: {
-        likes: number;
+        reactions: number;
         shares: number;
         comments: number;
     };

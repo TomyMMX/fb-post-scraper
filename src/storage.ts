@@ -1,6 +1,6 @@
 import Apify from 'apify';
 import { AsyncMap } from 'async-atomic-store';
-import type { FbPage } from './definitions';
+import type { FbPost } from './definitions';
 
 const { log } = Apify.utils;
 
@@ -51,7 +51,7 @@ export const emptyState = (): FbPage => ({
 export const statePersistor = async () => {
     const kv = await Apify.openKeyValueStore();
 
-    const state = new Map<string, Partial<FbPage>>(
+    const state = new Map<string, Partial<FbPost>>(
         await kv.getValue('STATE') as any,
     );
 
