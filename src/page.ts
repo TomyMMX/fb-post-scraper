@@ -722,12 +722,10 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
     };
 };
 
-export const getUserLogoUrl = async (page: Page): Promise<string> => {
+export const getVideoUrl = async (page: Page): Promise<string> => {
     await page.waitForSelector(CSS_SELECTORS.POST_CONTAINER);
 
-
-
-    return '';
+    return 'link';
 };
 
 /**

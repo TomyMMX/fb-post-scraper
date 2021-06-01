@@ -5,7 +5,7 @@ import * as fns from './functions';
 import {
     getPostContent,
     getPostInfoFromScript,
-    getUserLogoUrl,
+    getVideoUrl,
     isNotFoundPage,
 } from './page';
 import { statePersistor, emptyState } from './storage';
@@ -179,7 +179,7 @@ Apify.main(async () => {
             },
         },
         browserPoolOptions: {
-            maxOpenPagesPerBrowser: 1, // required to use one IP per tab
+            maxOpenPagesPerBrowser: 2, // required to use one IP per tab
         },
         persistCookiesPerSession: sessionStorage !== '',
         handlePageTimeoutSecs, // more comments, less concurrency
@@ -387,12 +387,14 @@ Apify.main(async () => {
                     const postTimer = stopwatch();
                     log.debug('Started processing video', { url: request.url });
                     const { username } = userData;
+
+                    var videoUrl = await getVideoUrl(page);
                     await map.append(username, async (value) => {
                         return {
                             ... value,
                             postVideos: [
                                 {
-                                    link: 'xx'
+                                    link: videoUrl
                                 }
                             ]
                         }
