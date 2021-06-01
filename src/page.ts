@@ -668,8 +668,7 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
                 const imgUrl = img?.src || null;
                 const linkText = link.querySelector('.accessible_elem')?.innerHTML || null;
 
-                const sjhfg = img?.innerText || '';
-                log.debug(sjhfg);
+                const sjhfg = img?.innerText || null;
 
                 if (curUrl) {
                     if (curUrl.imageUrl === null) {
@@ -679,12 +678,16 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
                     if (curUrl.text === null) {
                         curUrl.text = linkText;
                     }
+
+                    if (curUrl.title === null) {
+                        curUrl.title = sjhfg;
+                    }
                 } else {
                     const newUrl: FbPostLink = {
                         url: url,
                         imageUrl: imgUrl,
                         domain: '',
-                        title: '',
+                        title: sjhfg,
                         text: linkText
                     }
                     ret.push(newUrl);
