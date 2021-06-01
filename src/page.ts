@@ -3,7 +3,7 @@ import type { Page, Response } from 'puppeteer';
 import DelayAbort, { AbortError } from 'delayable-idle-abort-promise';
 import * as escapeRegex from 'escape-string-regexp';
 import get = require('lodash.get');
-import type { FbPageInfo, FbPost, FbPage, FbGraphQl, FbComment, FbCommentsMode, FbReview, FbService } from './definitions';
+import type { FbPageInfo, FbPost, FbPostLink, FbPage, FbGraphQl, FbComment, FbCommentsMode, FbReview, FbService } from './definitions';
 import {
     deferred,
     pageSelectors,
@@ -55,7 +55,7 @@ export const getPageInfo = async (page: Page): Promise<FbPageInfo> => {
     const titleValue = title.status === 'fulfilled' ? title.value : '';
 
     // this is a best effort attempt to get the like count. starting from 1 million+,
-    // things get wild and unprecise
+    // things get wild and un-precise
     const likes = await page.$eval(CSS_SELECTORS.META_DESCRIPTION, async (el, pageTitle) => {
         let text = '';
 
@@ -670,10 +670,13 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
             postLinks: [...new Set(links.filter(link => link.href).map((link) => {
                 try {
                     const url = new URL(link.href);
-
-                    return url.searchParams.get('u') || '';
+                    const img: HTMLImageElement|null = link.querySelector('.scaledImageFitWidth');
+                    return {
+                        url: url.searchParams.get('u') || '',
+                        imageUrl: img?.src || null
+                    } as FbPostLink
                 } catch (e) {
-                    return '';
+                    return {} as FbPostLink;
                 }
             }).filter(s => s))],
         };

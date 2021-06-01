@@ -114,6 +114,14 @@ export interface FbImage {
     image: string;
 }
 
+export interface FbPostLink {
+    url: string;
+    imageUrl: string | null;
+    domain: string | null;
+    title: string | null;
+    text: string | null;
+}
+
 export interface FbPost {
     postDate: string;
     postText: string;
@@ -123,13 +131,10 @@ export interface FbPost {
         shares: number;
         comments: number;
     };
-    postComments: {
-        count: number;
-        mode: FbCommentsMode;
-        comments: FbComment[];
-    };
     postImages: FbImage[];
-    postLinks: string[];
+    postLinks: FbPostLink[];
+    name: string;
+    logoUrl: string;
 }
 
 export interface FbService {
