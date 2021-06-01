@@ -668,7 +668,7 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
                 const imgUrl = img?.src || null;
                 const linkText = link.querySelector('.accessible_elem')?.innerHTML || null;
 
-                const sjhfg = img?.innerText || null;
+                const sjhfg = link?.innerText || null;
 
                 if (curUrl) {
                     if (curUrl.imageUrl === null) {
