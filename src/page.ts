@@ -732,8 +732,6 @@ export const getVideoUrl = async (page: Page): Promise<string|null> => {
             await page.click('.widePic > div > div');
             const videoContainer = firstPlayButton.parentElement;
             if (videoContainer) {
-                await page.waitForSelector('video');
-
                 return videoContainer.querySelector('video')?.src || null;
             }
         }
