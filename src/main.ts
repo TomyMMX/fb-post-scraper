@@ -39,7 +39,6 @@ Apify.main(async () => {
         maxPosts = 1,
         scrapePosts = true,
         language = 'en-US',
-        sessionStorage = '',
         useStealth = false,
         debugLog = false
     } = input;
@@ -153,7 +152,6 @@ Apify.main(async () => {
         }
     }
 
-    const maxConcurrency = process.env?.MAX_CONCURRENCY ? +process.env.MAX_CONCURRENCY : undefined;
     const cache = resourceCache([
         /rsrc\.php/,
     ]);
@@ -162,18 +160,16 @@ Apify.main(async () => {
         requestQueue,
         useSessionPool: true,
         sessionPoolOptions: {
-            persistStateKeyValueStoreId: sessionStorage || undefined,
-            maxPoolSize: sessionStorage ? 1 : undefined,
-            sessionOptions: {
-                maxErrorScore: 0.5,
-            },
+            maxPoolSize: 1,
         },
-        maxRequestRetries: 10,
-        maxConcurrency,
+        maxRequestRetries: 5,
+        maxConcurrency: 2,
         proxyConfiguration: proxyConfig,
         launchContext: {
-            stealth: useStealth,
+            useChrome: true,
+            stealth: true,
             launchOptions: {
+                headless: true,
                 devtools: debugLog,
                 useIncognitoPages: true,
             },

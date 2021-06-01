@@ -8,7 +8,6 @@ export interface Schema {
     maxPosts?: number;
     scrapePosts?: boolean;
     language?: string;
-    sessionStorage?: string;
     useStealth?: boolean;
     debugLog?: boolean;
 }
