@@ -376,7 +376,7 @@ Apify.main(async () => {
                     if (content.postImages) {
                         for (const img of content.postImages) {
                             if (img.link.includes('/videos/')) {
-                                await initVideoPage(img.link);
+                                await initVideoPage(img.link.replace('/www.', '/m.'));
                             }
                         }
                     }
@@ -385,7 +385,13 @@ Apify.main(async () => {
                 } else if (label === LABELS.VIDEO) {
                     const postTimer = stopwatch();
                     log.debug('Started processing video', { url: request.url });
-
+                    const { username } = userData;
+                    await map.append(username, async (value) => {
+                        return {
+                            ... value,
+                            videoUrl: 'xx'
+                        }
+                    });
                     log.info(`Processed video in ${postTimer() / 1000}s`, { url: request.url });
                 }
             } catch (e) {

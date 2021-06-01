@@ -135,7 +135,7 @@ export interface FbPost {
     postLinks: FbPostLink[];
     name: string | null;
     logoUrl: string | null;
-    hasVideo: boolean;
+    videoUrl: string | null;
 }
 
 export interface FbService {
