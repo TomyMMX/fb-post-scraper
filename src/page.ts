@@ -693,18 +693,7 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
                     image: img.src,
                 };
             }),
-            postLinks: [...new Set(links.filter(link => link.href).map((link) => {
-                try {
-                    const url = new URL(link.href);
-                    const img: HTMLImageElement|null = link.querySelector('.scaledImageFitWidth');
-                    return {
-                        url: url.searchParams.get('u') || '',
-                        imageUrl: img?.src || null
-                    } as FbPostLink
-                } catch (e) {
-                    return {} as FbPostLink;
-                }
-            }).filter(s => s))],
+            postLinks: postLinks
         };
     });
 
