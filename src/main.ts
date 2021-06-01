@@ -263,7 +263,7 @@ Apify.main(async () => {
                     deviceScaleFactor: useMobile ? 2 : 1,
                 },
             });
-
+/*
             await page.evaluateOnNewDocument(() => {
                 const f = () => {
                     for (const btn of document.querySelectorAll<HTMLButtonElement>('[data-testid="cookie-policy-dialog-accept-button"],[data-cookiebanner="accept_button"],#accept-cookie-banner-label')) {
@@ -275,6 +275,7 @@ Apify.main(async () => {
                 };
                 setTimeout(f);
             });
+*/
         }],
         handlePageFunction: async ({ request, page, session, browserController }) => {
             const { userData } = request;
@@ -333,22 +334,6 @@ Apify.main(async () => {
                     throw new InfoError('Facebook internal error, maybe it\'s going through instability, it will be retried', {
                         url: request.url,
                         namespace: 'internal',
-                        userData,
-                    });
-                }
-
-                if (label !== LABELS.LISTING
-                    && label !== LABELS.SEARCH
-                    && label !== LABELS.POST
-                    && request.userData.sub !== 'posts'
-                    && await isNotFoundPage(page)) {
-                    request.noRetry = true;
-
-                    // throw away if page is not available
-                    // but inform the user of error
-                    throw new InfoError('Content not found. This either means the page doesn\'t exist, or the section itself doesn\'t exist (about, reviews, services)', {
-                        url: request.url,
-                        namespace: 'isNotFoundPage',
                         userData,
                     });
                 }
