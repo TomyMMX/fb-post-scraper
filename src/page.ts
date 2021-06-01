@@ -726,17 +726,17 @@ export const getVideoUrl = async (page: Page): Promise<string|null> => {
     await page.waitForSelector('.widePic');
 
     return await page.$eval('#viewport', async (el): Promise<string|null> => {
-        const firstPlayButton: HTMLElement|null = el.querySelector('.widePic')?.querySelector('div[data-sigil="*playInlineVideo"]') || null;
+        const firstPlayButton: HTMLElement|null = el.querySelector('.widePic > div > div') || null;
 
         if (firstPlayButton) {
-            await firstPlayButton.click();
+            await page.click('.widePic > div > div');
             const videoContainer = firstPlayButton.parentElement;
             if (videoContainer) {
                 await page.waitForSelector('video', {visible: true});
 
                 return videoContainer.querySelector('video')?.src || null;
             }
-        } 
+        }
         return null;
 
     });
