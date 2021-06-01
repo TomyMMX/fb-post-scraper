@@ -725,12 +725,11 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
 export const getVideoUrl = async (page: Page): Promise<string|null> => {
     await page.waitForSelector('.widePic');
 
-    const playClicked =  await page.$eval('#viewport', async (el): Promise<boolean> => {
+    const playClicked = await page.$eval('#viewport', async (el): Promise<boolean> => {
         const firstPlayButton = el.querySelector<HTMLDivElement>('.widePic > div > div');
 
         if (firstPlayButton) {
             firstPlayButton.click();
-            log.debug('Clicked play...');
             return true;
         }
 
@@ -738,6 +737,7 @@ export const getVideoUrl = async (page: Page): Promise<string|null> => {
     });
 
     if (playClicked) {
+        log.debug('Clicked play...');
         await page.waitForSelector('video');
         log.debug('Video found...');
         return await page.$eval('#viewport', async (el): Promise<string|null> => {
@@ -745,6 +745,7 @@ export const getVideoUrl = async (page: Page): Promise<string|null> => {
         });
     }
 
+    log.debug('No play ...');
     return null;
 };
 
