@@ -723,7 +723,7 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
 };
 
 export const getVideoUrl = async (page: Page): Promise<string> => {
-    await page.waitForSelector(CSS_SELECTORS.POST_CONTAINER);
+    await page.waitForSelector('.widePic');
 
     return 'link';
 };
