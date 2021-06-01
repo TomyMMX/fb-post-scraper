@@ -722,10 +722,24 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
     };
 };
 
-export const getVideoUrl = async (page: Page): Promise<string> => {
+export const getVideoUrl = async (page: Page): Promise<string|null> => {
     await page.waitForSelector('.widePic');
 
-    return 'link';
+    return await page.$eval('#viewport', async (el): Promise<string|null> => {
+        const firstPlayButton: HTMLElement|null = el.querySelector('.widePic')?.querySelector('div[data-sigil="*playInlineVideo"]') || null;
+
+        if (firstPlayButton) {
+            await firstPlayButton.click();
+            const videoContainer = firstPlayButton.parentElement;
+            if (videoContainer) {
+                await page.waitForSelector('video', {visible: true});
+
+                return videoContainer.querySelector('video')?.src || null;
+            }
+        } 
+        return null;
+
+    });
 };
 
 /**
