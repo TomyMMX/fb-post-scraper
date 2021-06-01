@@ -395,7 +395,6 @@ Apify.main(async () => {
                     ]);
 
                     content = {
-                        name: username,
                         ... content,
                         postStats
                     }

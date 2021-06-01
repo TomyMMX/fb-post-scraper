@@ -133,7 +133,7 @@ export interface FbPost {
     };
     postImages: FbImage[];
     postLinks: FbPostLink[];
-    name: string;
+    name: string | null;
     logoUrl: string | null;
 }
 
