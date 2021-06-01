@@ -18,7 +18,6 @@ const { log, puppeteer } = Apify.utils;
 const {
     getUrlLabel,
     setLanguageCodeToCookie,
-    normalizeOutputPageUrl,
     extractUsernameFromUrl,
     stopwatch,
     executeOnDebug,
@@ -26,30 +25,11 @@ const {
     proxyConfiguration,
     resourceCache,
     photoToPost,
-    extendFunction,
-    createAddPageSearch,
 } = fns;
 
 Apify.main(async () => {
     const input: Schema | null = await Apify.getInput() as any;
-/*
-    const input = {
-        "startUrls": [
-          {
-            "url": "https://m.facebook.com/celtra/posts/10164321818700431",
-            "method": "GET"
-          }
-        ],
-        "language": "en-US",
-        "maxPosts": 1,
-        "scrapePosts": true,
-        "proxyConfiguration": {
-          "useApifyProxy": false,
-        },
-        "useStealth": false,
-        "debugLog": true
-      };
-*/
+
     if (!input || typeof input !== 'object') {
         throw new Error('Missing input');
     }
@@ -129,7 +109,16 @@ Apify.main(async () => {
         throw new Error('No requests were loaded from startUrls');
     }
 
-    const addPageSearch = createAddPageSearch(requestQueue);
+    const initVideoPage = async (url: string) => {
+        await requestQueue.addRequest({
+            url: url,
+            userData: {
+                label: LABELS.VIDEO,
+                ref: url,
+                useMobile: true,
+            },
+        }, { forefront: true });
+    };
 
     for (const request of processedRequests) {
         try {
@@ -167,22 +156,6 @@ Apify.main(async () => {
     const cache = resourceCache([
         /rsrc\.php/,
     ]);
-
-    const extendScraperFunction = await extendFunction({
-        output: async () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
-        key: 'extendScraperFunction',
-        input,
-        helpers: {
-            state,
-            handlePageTimeoutSecs,
-            cache,
-            requestQueue,
-            LABELS,
-            addPageSearch,
-            map,
-            fns
-        },
-    });
 
     const crawler = new Apify.PuppeteerCrawler({
         requestQueue,
@@ -388,10 +361,9 @@ Apify.main(async () => {
                     // mobile address
                     const { username, canonical } = userData;
 
-                    var [postStats, content, logoImg] = await Promise.all([
+                    var [postStats, content] = await Promise.all([
                         getPostInfoFromScript(page, canonical),
-                        getPostContent(page),
-                        getUserLogoUrl(page),
+                        getPostContent(page)
                     ]);
 
                     content = {
@@ -401,7 +373,20 @@ Apify.main(async () => {
 
                     await map.write(username, content);
 
+                    if (content.postImages) {
+                        for (const img of content.postImages) {
+                            if (img.link.includes('/videos/')) {
+                                await initVideoPage(img.link);
+                            }
+                        }
+                    }
+
                     log.info(`Processed post in ${postTimer() / 1000}s`, { url: request.url });
+                } else if (label === LABELS.VIDEO) {
+                    const postTimer = stopwatch();
+                    log.debug('Started processing video', { url: request.url });
+
+                    log.info(`Processed video in ${postTimer() / 1000}s`, { url: request.url });
                 }
             } catch (e) {
                 log.debug(e.message, {
@@ -422,13 +407,7 @@ Apify.main(async () => {
 
                 throw e;
             } finally {
-                await extendScraperFunction(undefined, {
-                    page,
-                    request,
-                    session,
-                    username: extractUsernameFromUrl(request.url),
-                    label: 'HANDLE',
-                });
+                
             }
 
             log.debug(`Done with page ${request.url}`);
@@ -445,17 +424,7 @@ Apify.main(async () => {
         },
     });
 
-    await extendScraperFunction(undefined, {
-        label: 'SETUP',
-        crawler,
-    });
-
     await crawler.run();
-
-    await extendScraperFunction(undefined, {
-        label: 'FINISH',
-        crawler,
-    });
 
     await persistState();
 

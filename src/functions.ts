@@ -591,6 +591,10 @@ export const getUrlLabel = (url: string): FbLabel => {
             return LABELS.POST;
         }
 
+        if (/\/videos\/\d+/.test(parsedUrl.pathname)) {
+            return LABELS.VIDEO;
+        }
+
         if (/\/(pg)?\/?[a-z0-9.\-%]+\/?/i.test(parsedUrl.pathname)) {
             return LABELS.PAGE;
         }

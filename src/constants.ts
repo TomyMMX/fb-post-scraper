@@ -11,6 +11,7 @@ export const LABELS: Record<FbLabel, FbLabel> = {
     PAGE: 'PAGE',
     PHOTO: 'PHOTO',
     POST: 'POST',
+    VIDEO: 'VIDEO',
 };
 
 export const CSS_SELECTORS = {
