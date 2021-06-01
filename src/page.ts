@@ -658,6 +658,32 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
         const images: HTMLImageElement[] = Array.from(el.querySelectorAll('img[src*="scontent"]'));
         const links: HTMLAnchorElement[] = Array.from(el.querySelectorAll('[href*="l.facebook.com/l.php?u="]'));
 
+        const acc: FbPostLink[] = new Array;
+        const postLinks: FbPostLink[] = links.filter(link => link.href).reduce((ret, link) => {
+            const url = new URL(link.href).searchParams.get('u');
+            if (url) {
+                const curUrl = ret.find(l => l.url === url);
+                const img: HTMLImageElement|null = link.querySelector('.scaledImageFitWidth');
+                const imgUrl = img?.src || null;
+
+                if (curUrl) {
+                    if (curUrl.imageUrl === null) {
+                        curUrl.imageUrl = imgUrl;
+                    }
+                } else {
+                    const newUrl: FbPostLink = {
+                        url: url,
+                        imageUrl: imgUrl,
+                        domain: '',
+                        title: '',
+                        text: ''
+                    }
+                    ret.push(newUrl);
+                }
+            }
+            return ret;
+        }, acc);
+
         return {
             postDate,
             postText,
