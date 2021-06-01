@@ -109,13 +109,14 @@ Apify.main(async () => {
         throw new Error('No requests were loaded from startUrls');
     }
 
-    const initVideoPage = async (url: string) => {
+    const initVideoPage = async (url: string, username: string) => {
         await requestQueue.addRequest({
             url: url,
             userData: {
                 label: LABELS.VIDEO,
                 ref: url,
                 useMobile: true,
+                username,
             },
         }, { forefront: true });
     };
@@ -376,7 +377,7 @@ Apify.main(async () => {
                     if (content.postImages) {
                         for (const img of content.postImages) {
                             if (img.link.includes('/videos/')) {
-                                await initVideoPage(img.link.replace('/www.', '/m.'));
+                                await initVideoPage(img.link.replace('/www.', '/m.'), username);
                             }
                         }
                     }
@@ -389,7 +390,11 @@ Apify.main(async () => {
                     await map.append(username, async (value) => {
                         return {
                             ... value,
-                            videoUrl: 'xx'
+                            postVideos: [
+                                {
+                                    link: 'xx'
+                                }
+                            ]
                         }
                     });
                     log.info(`Processed video in ${postTimer() / 1000}s`, { url: request.url });

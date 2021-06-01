@@ -711,8 +711,7 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
                     image: img.src,
                 };
             }),
-            postLinks: postLinks,
-            hasVideo: hasVideo
+            postLinks: postLinks
         };
     });
 

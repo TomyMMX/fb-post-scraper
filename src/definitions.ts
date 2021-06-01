@@ -114,6 +114,10 @@ export interface FbImage {
     image: string;
 }
 
+export interface FbVideo {
+    link: string;
+}
+
 export interface FbPostLink {
     url: string;
     thumbUrl: string | null;
@@ -132,6 +136,7 @@ export interface FbPost {
         comments: number;
     };
     postImages: FbImage[];
+    postVideos: FbVideo[];
     postLinks: FbPostLink[];
     name: string | null;
     logoUrl: string | null;
