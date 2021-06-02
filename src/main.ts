@@ -259,7 +259,7 @@ Apify.main(async () => {
                     deviceScaleFactor: useMobile ? 2 : 1,
                 },
             });
-/*
+
             await page.evaluateOnNewDocument(() => {
                 const f = () => {
                     for (const btn of document.querySelectorAll<HTMLButtonElement>('[data-testid="cookie-policy-dialog-accept-button"],[data-cookiebanner="accept_button"],#accept-cookie-banner-label')) {
@@ -271,7 +271,7 @@ Apify.main(async () => {
                 };
                 setTimeout(f);
             });
-*/
+
         }],
         handlePageFunction: async ({ request, page, session, browserController }) => {
             const { userData } = request;
