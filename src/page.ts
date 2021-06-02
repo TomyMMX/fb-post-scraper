@@ -153,9 +153,25 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
 };
 
 export const getVideoUrl = async (page: Page, timeout: number): Promise<string|null> => {
-    await page.waitForSelector('.widePic > div > div');
-    // This is needed because for some reason the video sometimes does not load if we click too fast
     await page.waitForTimeout(timeout);
+    const waitForCookiePromptHidden = async () => {
+        try {
+            const isHidden = await page.$eval('[data-testid="cookie-policy-dialog-accept-button"],[data-cookiebanner="accept_button"],#accept-cookie-banner-label', async (el): Promise<boolean> => {
+                return (<HTMLElement>el).offsetParent === null;
+            });
+
+            if (!isHidden) {
+                log.debug('Wait for cookie click...');
+                await page.waitForTimeout(250);
+                await waitForCookiePromptHidden();
+            } else {
+                log.debug('Cookie prompt hidden.');
+            }
+        } catch (e) {}
+    };
+    await waitForCookiePromptHidden();
+
+    await page.waitForSelector('.widePic > div > div');
     const playClicked = await page.$eval('.widePic > div > div', async (el): Promise<boolean> => {
         (<HTMLDivElement>el).click();
         return true;
@@ -164,7 +180,7 @@ export const getVideoUrl = async (page: Page, timeout: number): Promise<string|n
     if (playClicked) {
         log.debug('Clicked play...');
         await page.waitForSelector('video', {timeout: 3000});
-        //log.debug('Video found...');
+        log.debug('Video found...');
         return await page.$eval('video', async (el): Promise<string|null> => {
             return (<HTMLVideoElement>el)?.src || null;
         });

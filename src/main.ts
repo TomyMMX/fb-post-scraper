@@ -64,7 +64,7 @@ Apify.main(async () => {
 
     residentialWarning();
 
-    let handlePageTimeoutSecs = 30;
+    let handlePageTimeoutSecs = 3000;
     log.info(`Will use ${handlePageTimeoutSecs}s timeout for page`);
 
     const startUrlsRequests = new Apify.RequestList({
@@ -130,6 +130,9 @@ Apify.main(async () => {
                         canonical: storyFbToDesktopPermalink(url)?.toString(),
                     },
                 });
+            } else if (urlType === LABELS.VIDEO) {
+                const username = extractUsernameFromUrl(url);
+                await initVideoPage(url, username);
             }
         } catch (e) {
             if (e instanceof InfoError) {
@@ -254,7 +257,9 @@ Apify.main(async () => {
             await page.evaluateOnNewDocument(() => {
                 const f = () => {
                     for (const btn of document.querySelectorAll<HTMLButtonElement>('[data-testid="cookie-policy-dialog-accept-button"],[data-cookiebanner="accept_button"],#accept-cookie-banner-label')) {
-                        if (btn) {
+                        // Only click on btn if visible on screen.
+                        // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetParent
+                        if (btn && btn.offsetParent) {
                             btn.click();
                         }
                     }
