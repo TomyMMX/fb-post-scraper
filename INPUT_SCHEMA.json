@@ -1,6 +1,6 @@
 {
-    "title": "facebook-page-crawler",
-    "description": "Extract data from public Facebook posts.",
+    "title": "facebook-post-scraper",
+    "description": "Extracts data from public Facebook posts.",
     "type": "object",
     "schemaVersion": 1,
     "properties": {
@@ -243,16 +243,14 @@
                 "日本語(関西)"
             ]
         },
-
-        "maxPosts": {
-            "title": "Max posts",
-            "description": "Limit the max number of posts to return",
+        "videoClickTimeout": {
+            "title": "Video click timeout",
+            "description": "How much time to wait before we click on the play button in ms.",
             "type": "integer",
-            "default": 3,
-            "prefill": 3,
+            "default": 2000,
+            "prefill": 2000,
             "editor": "number"
         },
-
         "proxyConfiguration": {
             "title": "Proxy configuration",
             "type": "object",
@@ -275,14 +273,6 @@
             "title": "Debug Log",
             "description": "Enable a more verbose logging to be able to understand what's happening during the scraping",
             "type": "boolean"
-        },
-        "videoClickTimeout": {
-            "title": "Video click timeout",
-            "description": "How much time to wait before we click on the play button in ms.",
-            "type": "integer",
-            "default": 2000,
-            "prefill": 2000,
-            "editor": "number"
         }
     },
     "required": ["startUrl", "proxyConfiguration"]
