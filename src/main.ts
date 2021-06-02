@@ -182,8 +182,9 @@ Apify.main(async () => {
         persistCookiesPerSession: false,
         handlePageTimeoutSecs, // more comments, less concurrency
         preNavigationHooks: [async ({ page, request }, gotoOptions) => {
-            gotoOptions.waitUntil = 'domcontentloaded';
-            gotoOptions.timeout = 60000;
+            //gotoOptions.waitUntil = 'domcontentloaded';
+            gotoOptions.waitUntil = 'load';
+            gotoOptions.timeout = 20000;
 
             await setLanguageCodeToCookie(language, page);
 
@@ -400,8 +401,6 @@ Apify.main(async () => {
                 }
 
                 throw e;
-            } finally {
-                
             }
 
             log.debug(`Done with page ${request.url}`);
@@ -436,5 +435,5 @@ Apify.main(async () => {
 
     residentialWarning();
 
-    log.info(`Done in ${Math.round(elapsed() / 60000)}m!`);
+    log.info(`Done in ${Math.round(elapsed() / 1000)}s!`);
 });
