@@ -147,7 +147,7 @@ Apify.main(async () => {
 
     const crawler = new Apify.PuppeteerCrawler({
         requestQueue,
-        useSessionPool: false,
+        useSessionPool: true,
         /*sessionPoolOptions: {
             maxPoolSize: 1000,
             sessionOptions: {
@@ -155,7 +155,7 @@ Apify.main(async () => {
             },
         },*/
         maxRequestRetries: 3,
-        maxConcurrency: 1,
+        maxConcurrency: 2,
         proxyConfiguration: proxyConfig,
         launchContext: {
             stealth: useStealth,
@@ -165,7 +165,7 @@ Apify.main(async () => {
             },
         },
         browserPoolOptions: {
-            maxOpenPagesPerBrowser: 1,
+            maxOpenPagesPerBrowser: 2,
         },
         persistCookiesPerSession: false,
         handlePageTimeoutSecs, // more comments, less concurrency
