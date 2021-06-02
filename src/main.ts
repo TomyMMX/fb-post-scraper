@@ -161,7 +161,7 @@ Apify.main(async () => {
         requestQueue,
         useSessionPool: true,
         sessionPoolOptions: {
-            maxPoolSize: 1,
+            maxPoolSize: 10,
             sessionOptions: {
                 maxErrorScore: 0.5,
             },
