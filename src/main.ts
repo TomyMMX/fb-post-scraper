@@ -102,7 +102,7 @@ Apify.main(async () => {
             userData: {
                 label: LABELS.VIDEO,
                 ref: url,
-                useMobile: true,
+                useMobile: false,
                 username,
             },
         }, { forefront: true });
@@ -207,7 +207,7 @@ Apify.main(async () => {
             });
 */
             await cache(page);
-
+/*
             // make the page a little more lightweight
             await puppeteer.blockRequests(page, {
                 urlPatterns: [
@@ -227,7 +227,7 @@ Apify.main(async () => {
                     'ajax/bz',
                 ],
             });
-
+*/
             const { userData: { useMobile } } = request;
 
             // listing need to start in a desktop version
