@@ -5,8 +5,6 @@ export type FbCommentsMode = 'RANKED_THREADED' | 'RECENT_ACTIVITY' | 'RANKED_UNF
 export interface Schema {
     startUrls: Array<string | { url: string }>;
     proxyConfiguration?: any;
-    maxPosts?: number;
-    scrapePosts?: boolean;
     language?: string;
     useStealth?: boolean;
     debugLog?: boolean;

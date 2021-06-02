@@ -153,18 +153,9 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
 };
 
 export const getVideoUrl = async (page: Page): Promise<string|null> => {
-/*
-    await page.waitForSelector('#mobile_related_video_feed_pagelet');
-
-    await page.$eval('#viewport', async (el): Promise<void> => {
-        const relatedVideos = el.querySelector<HTMLDivElement>('#mobile_related_video_feed_pagelet');
-        if (relatedVideos) {
-            relatedVideos.parentNode.removeChild(relatedVideos);
-        }
-    });
-*/
     await page.waitForSelector('.widePic > div > div');
-    await page.waitForTimeout(2000);
+    // This is needed because for some reason the video sometimes does not load if we click too fast
+    await page.waitForTimeout(1000);
     const playClicked = await page.$eval('#viewport', async (el): Promise<boolean> => {
         const firstPlayButton = el.querySelector<HTMLDivElement>('.widePic > div > div');
         if (firstPlayButton) {

@@ -36,8 +36,6 @@ Apify.main(async () => {
 
     const {
         startUrls = [],
-        maxPosts = 1,
-        scrapePosts = true,
         language = 'en-US',
         useStealth = false,
         debugLog = false
@@ -65,17 +63,7 @@ Apify.main(async () => {
 
     residentialWarning();
 
-    let handlePageTimeoutSecs = Math.round(60 * ((maxPosts || 10) * 0.08)) + 600; // minimum 600s
-
-    if (handlePageTimeoutSecs * 60000 >= 0x7FFFFFFF) {
-        log.warning(`maxPosts parameter is too high, must be less than ${0x7FFFFFFF} milliseconds in total, got ${handlePageTimeoutSecs * 60000}. Loading posts and comments might never finish or crash the scraper at any moment.`, {
-            maxPosts,
-            handlePageTimeoutSecs,
-            handlePageTimeout: handlePageTimeoutSecs * 60000,
-        });
-        handlePageTimeoutSecs = Math.floor(0x7FFFFFFF / 60000);
-    }
-
+    let handlePageTimeoutSecs = 30;
     log.info(`Will use ${handlePageTimeoutSecs}s timeout for page`);
 
     const startUrlsRequests = new Apify.RequestList({
