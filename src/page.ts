@@ -153,7 +153,7 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
 };
 
 export const getVideoUrl = async (page: Page): Promise<string|null> => {
-
+/*
     await page.waitForSelector('#mobile_related_video_feed_pagelet');
 
     await page.$eval('#viewport', async (el): Promise<void> => {
@@ -162,9 +162,9 @@ export const getVideoUrl = async (page: Page): Promise<string|null> => {
             relatedVideos.parentNode.removeChild(relatedVideos);
         }
     });
-
+*/
     await page.waitForSelector('.widePic > div > div');
-
+    await page.waitForTimeout(2000);
     const playClicked = await page.$eval('#viewport', async (el): Promise<boolean> => {
         const firstPlayButton = el.querySelector<HTMLDivElement>('.widePic > div > div');
         if (firstPlayButton) {
@@ -176,7 +176,7 @@ export const getVideoUrl = async (page: Page): Promise<string|null> => {
 
     if (playClicked) {
         log.debug('Clicked play...');
-        await page.waitForSelector('video', {timeout: 2000});
+        await page.waitForSelector('video', {timeout: 1000});
         log.debug('Video found...');
         return await page.$eval('#viewport', async (el): Promise<string|null> => {
             return el.querySelector('video')?.src || null;
