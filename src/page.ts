@@ -164,7 +164,7 @@ export const getVideoUrl = async (page: Page): Promise<string|null> => {
         }
         return false;
     });
-    await page.waitForTimeout(2000);
+    //await page.waitForTimeout(2000);
     if (playClicked) {
         log.debug('Clicked play...');
         await page.waitForSelector('video', {timeout: 3000});
