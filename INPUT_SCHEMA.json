@@ -1,18 +1,15 @@
 {
     "title": "facebook-page-crawler",
-    "description": "Extract public profile information from Facebook pages and service listings. The actor scrapes data from Facebook posts",
+    "description": "Extract data from public Facebook posts.",
     "type": "object",
     "schemaVersion": 1,
     "properties": {
         "startUrl": {
-            "title": "Start url",
-            "description": "Any valud Facebook Post or Video URL.",
-            "default": null,
-            "prefill": "https://www.facebook.com/apifytech/posts/1870691846445672",
+            "title": "Post url",
+            "description": "Any valid Facebook Post or Video URL.",
             "example": "https://www.facebook.com/apifytech/posts/1870691846445672",
             "type": "string",
-            "uniqueItems": true,
-            "editor": "requestListSources"
+            "editor": "textfield"
         },
         "language": {
             "title": "Language",
