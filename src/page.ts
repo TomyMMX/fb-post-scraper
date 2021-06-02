@@ -156,21 +156,17 @@ export const getVideoUrl = async (page: Page, timeout: number): Promise<string|n
     await page.waitForSelector('.widePic > div > div');
     // This is needed because for some reason the video sometimes does not load if we click too fast
     await page.waitForTimeout(timeout);
-    const playClicked = await page.$eval('#viewport', async (el): Promise<boolean> => {
-        const firstPlayButton = el.querySelector<HTMLDivElement>('.widePic > div > div');
-        if (firstPlayButton) {
-            firstPlayButton.click();
-            return true;
-        }
-        return false;
+    const playClicked = await page.$eval('.widePic > div > div', async (el): Promise<boolean> => {
+        (<HTMLDivElement>el).click();
+        return true;
     });
 
     if (playClicked) {
         log.debug('Clicked play...');
-        //await page.waitForSelector('video', {timeout: 3000});
+        await page.waitForSelector('video', {timeout: 3000});
         //log.debug('Video found...');
-        return await page.$eval('#viewport', async (el): Promise<string|null> => {
-            return el.querySelector('video')?.src || null;
+        return await page.$eval('video', async (el): Promise<string|null> => {
+            return (<HTMLVideoElement>el)?.src || null;
         });
     }
 
