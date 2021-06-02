@@ -76,7 +76,7 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
             throw new Error('Missing .userContent');
         }
 
-        window.unhideChildren(userContent);
+        //window.unhideChildren(userContent);
 
         const postText = userContent.innerText.trim();
         const images: HTMLImageElement[] = Array.from(el.querySelectorAll('img[src*="scontent"]'));
@@ -153,7 +153,7 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
 };
 
 export const getVideoUrl = async (page: Page): Promise<string|null> => {
-    await page.waitForSelector('.widePic');
+    await page.waitForSelector('.widePic > div > div');
 
     const playClicked = await page.$eval('#viewport', async (el): Promise<boolean> => {
         const firstPlayButton = el.querySelector<HTMLDivElement>('.widePic > div > div');
@@ -166,7 +166,7 @@ export const getVideoUrl = async (page: Page): Promise<string|null> => {
 
     if (playClicked) {
         log.debug('Clicked play...');
-        await page.waitForSelector('video');
+        await page.waitForSelector('.widePic > div > video');
         log.debug('Video found...');
         return await page.$eval('#viewport', async (el): Promise<string|null> => {
             return el.querySelector('video')?.src || null;

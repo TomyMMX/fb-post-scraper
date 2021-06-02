@@ -152,7 +152,7 @@ Apify.main(async () => {
         }
     }
 
-    const maxConcurrency = process.env?.MAX_CONCURRENCY ? +process.env.MAX_CONCURRENCY : undefined;
+    //const maxConcurrency = process.env?.MAX_CONCURRENCY ? +process.env.MAX_CONCURRENCY : undefined;
     const cache = resourceCache([
         /rsrc\.php/,
     ]);
@@ -167,7 +167,7 @@ Apify.main(async () => {
             },
         },
         maxRequestRetries: 5,
-        maxConcurrency,
+        maxConcurrency: 3,
         proxyConfiguration: proxyConfig,
         launchContext: {
             stealth: useStealth,
@@ -177,7 +177,7 @@ Apify.main(async () => {
             },
         },
         browserPoolOptions: {
-            maxOpenPagesPerBrowser: 2,
+            maxOpenPagesPerBrowser: 1,
         },
         persistCookiesPerSession: false,
         handlePageTimeoutSecs, // more comments, less concurrency
@@ -192,7 +192,7 @@ Apify.main(async () => {
                     console.log(...args); // eslint-disable-line no-console
                 });
             });
-
+/*
             await page.exposeFunction('unhideChildren', (element?: HTMLElement) => {
                 // weird bugs happen in this function, sometimes the dom element has no querySelectorAll for
                 // unknown reasons
@@ -216,7 +216,7 @@ Apify.main(async () => {
                     }
                 }
             });
-
+*/
             await cache(page);
 
             // make the page a little more lightweight
@@ -252,14 +252,14 @@ Apify.main(async () => {
             await page.emulate({
                 userAgent,
                 viewport: {
-                    height: useMobile ? 700 : 1080,
-                    width: useMobile ? 400 : 1920,
+                    height: useMobile ? 1200 : 1080,
+                    width: useMobile ? 800 : 1920,
                     hasTouch: useMobile,
                     isMobile: useMobile,
                     deviceScaleFactor: useMobile ? 2 : 1,
                 },
             });
-
+/*
             await page.evaluateOnNewDocument(() => {
                 const f = () => {
                     for (const btn of document.querySelectorAll<HTMLButtonElement>('[data-testid="cookie-policy-dialog-accept-button"],[data-cookiebanner="accept_button"],#accept-cookie-banner-label')) {
@@ -271,7 +271,7 @@ Apify.main(async () => {
                 };
                 setTimeout(f);
             });
-
+*/
         }],
         handlePageFunction: async ({ request, page, session, browserController }) => {
             const { userData } = request;
