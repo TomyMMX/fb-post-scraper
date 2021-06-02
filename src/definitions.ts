@@ -3,11 +3,12 @@ export type FbLabel = 'POST' | 'PHOTO' | 'VIDEO';
 export type FbCommentsMode = 'RANKED_THREADED' | 'RECENT_ACTIVITY' | 'RANKED_UNFILTERED';
 
 export interface Schema {
-    startUrls: Array<string | { url: string }>;
+    startUrl: string;
     proxyConfiguration?: any;
     language?: string;
     useStealth?: boolean;
     debugLog?: boolean;
+    videoClickTimeout?: number;
 }
 
 export interface FbImage {

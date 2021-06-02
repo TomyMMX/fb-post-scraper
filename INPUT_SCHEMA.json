@@ -4,16 +4,13 @@
     "type": "object",
     "schemaVersion": 1,
     "properties": {
-        "startUrls": {
-            "title": "Start urls",
-            "description": "Can provide either existing pages or business listing in the format https://www.facebook.com/biz/",
-            "default": [],
-            "prefill": [{ "url": "https://www.facebook.com/apifytech/" }],
-            "example": [
-                { "url": "https://www.facebook.com/apifytech" },
-                { "url": "https://www.facebook.com/biz/hotel-supply-service/?place_id=103095856397524" }
-            ],
-            "type": "array",
+        "startUrl": {
+            "title": "Start url",
+            "description": "Any valud Facebook Post or Video URL.",
+            "default": null,
+            "prefill": "https://www.facebook.com/apifytech/posts/1870691846445672",
+            "example": "https://www.facebook.com/apifytech/posts/1870691846445672",
+            "type": "string",
             "uniqueItems": true,
             "editor": "requestListSources"
         },
@@ -259,15 +256,6 @@
             "editor": "number"
         },
 
-        "scrapePosts": {
-            "title": "Posts",
-            "description": "Get the Posts",
-            "default": true,
-            "example": true,
-            "type": "boolean",
-            "editor": "checkbox"
-        },
-
         "proxyConfiguration": {
             "title": "Proxy configuration",
             "type": "object",
@@ -281,17 +269,6 @@
             },
             "editor": "proxy"
         },
-        "sessionStorage": {
-            "title": "Session storage",
-            "description": "Provide a named session storage. Should be used in conjunction with login session actor. The same sessionStorage name should be supplied here. Don't use this unless you have a task that does Facebook logins using login-session actor",
-            "type": "string",
-            "editor": "textfield",
-            "default": "",
-            "example": "named-storage",
-            "sectionCaption": "Experimental features",
-            "sectionDescription": "Features in this section are highly experimental, can result in a ban of the account if logged in and might cause the solution to fail.",
-            "nullable": true
-        },
         "useStealth": {
             "title": "Use stealth",
             "description": "Enable stealth on headless Chrome. Enable this only if you're having problems with blocking.",
@@ -301,7 +278,15 @@
             "title": "Debug Log",
             "description": "Enable a more verbose logging to be able to understand what's happening during the scraping",
             "type": "boolean"
+        },
+        "videoClickTimeout": {
+            "title": "Video click timeout",
+            "description": "How much time to wait before we click on the play button in ms.",
+            "type": "integer",
+            "default": 2000,
+            "prefill": 2000,
+            "editor": "number"
         }
     },
-    "required": ["proxyConfiguration"]
+    "required": ["startUrl", "proxyConfiguration"]
 }

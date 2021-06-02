@@ -35,18 +35,19 @@ Apify.main(async () => {
     }
 
     const {
-        startUrls = [],
+        startUrl = null,
         language = 'en-US',
         useStealth = false,
-        debugLog = false
+        debugLog = false,
+        videoClickTimeout = 2000,
     } = input;
 
     if (debugLog) {
         log.setLevel(log.LEVELS.DEBUG);
     }
 
-    if (!Array.isArray(startUrls) || !startUrls.length) {
-        throw new Error('You must provide the "startUrls" input');
+    if (!startUrl) {
+        throw new Error('You must provide the "startUrl" input');
     }
 
     const proxyConfig = await proxyConfiguration({
@@ -67,7 +68,7 @@ Apify.main(async () => {
     log.info(`Will use ${handlePageTimeoutSecs}s timeout for page`);
 
     const startUrlsRequests = new Apify.RequestList({
-        sources: startUrls,
+        sources: [startUrl],
     });
 
     await startUrlsRequests.initialize();
@@ -92,7 +93,7 @@ Apify.main(async () => {
         processedRequests.add(nextRequest);
     }
 
-    if (startUrls?.length && !processedRequests.size) {
+    if (!processedRequests.size) {
         throw new Error('No requests were loaded from startUrls');
     }
 
@@ -248,7 +249,8 @@ Apify.main(async () => {
                     deviceScaleFactor: useMobile ? 2 : 1,
                 },
             });
-/*
+
+            // Accept cookie policy if it pops up.
             await page.evaluateOnNewDocument(() => {
                 const f = () => {
                     for (const btn of document.querySelectorAll<HTMLButtonElement>('[data-testid="cookie-policy-dialog-accept-button"],[data-cookiebanner="accept_button"],#accept-cookie-banner-label')) {
@@ -256,11 +258,11 @@ Apify.main(async () => {
                             btn.click();
                         }
                     }
-                    setTimeout(f, 1000);
+                    setTimeout(f, 500);
                 };
                 setTimeout(f);
             });
-*/
+
         }],
         handlePageFunction: async ({ request, page, session, browserController }) => {
             const { userData } = request;
@@ -354,7 +356,7 @@ Apify.main(async () => {
                     log.debug('Started processing video', { url: request.url });
                     const { username } = userData;
 
-                    var videoUrl = await getVideoUrl(page);
+                    var videoUrl = await getVideoUrl(page, videoClickTimeout);
                     await map.append(username, async (value) => {
                         if (value) {
                             delete value.videoPostUrl;

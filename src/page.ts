@@ -152,10 +152,10 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
     };
 };
 
-export const getVideoUrl = async (page: Page): Promise<string|null> => {
+export const getVideoUrl = async (page: Page, timeout: number): Promise<string|null> => {
     await page.waitForSelector('.widePic > div > div');
     // This is needed because for some reason the video sometimes does not load if we click too fast
-    await page.waitForTimeout(3000);
+    await page.waitForTimeout(timeout);
     const playClicked = await page.$eval('#viewport', async (el): Promise<boolean> => {
         const firstPlayButton = el.querySelector<HTMLDivElement>('.widePic > div > div');
         if (firstPlayButton) {
