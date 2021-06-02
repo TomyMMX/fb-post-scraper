@@ -182,8 +182,8 @@ Apify.main(async () => {
         persistCookiesPerSession: false,
         handlePageTimeoutSecs, // more comments, less concurrency
         preNavigationHooks: [async ({ page, request }, gotoOptions) => {
-            //gotoOptions.waitUntil = 'domcontentloaded';
-            gotoOptions.waitUntil = 'load';
+            gotoOptions.waitUntil = 'domcontentloaded';
+            //gotoOptions.waitUntil = 'load';
             gotoOptions.timeout = 20000;
 
             await setLanguageCodeToCookie(language, page);
@@ -228,7 +228,7 @@ Apify.main(async () => {
                     '.mov',
                     '.mpeg',
                     '.mpg',
-                    '.mp4',
+                    //'.mp4',
                     '.woff2',
                     '.ttf',
                     '.ico',
