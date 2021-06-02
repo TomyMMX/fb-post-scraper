@@ -147,15 +147,15 @@ Apify.main(async () => {
 
     const crawler = new Apify.PuppeteerCrawler({
         requestQueue,
-        useSessionPool: true,
-        sessionPoolOptions: {
+        useSessionPool: false,
+        /*sessionPoolOptions: {
             maxPoolSize: 1000,
             sessionOptions: {
                 maxErrorScore: 0.5,
             },
-        },
+        },*/
         maxRequestRetries: 3,
-        maxConcurrency: 3,
+        maxConcurrency: 1,
         proxyConfiguration: proxyConfig,
         launchContext: {
             stealth: useStealth,
