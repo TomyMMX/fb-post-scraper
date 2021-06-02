@@ -167,8 +167,8 @@ export const getVideoUrl = async (page: Page, timeout: number): Promise<string|n
 
     if (playClicked) {
         log.debug('Clicked play...');
-        await page.waitForSelector('video', {timeout: 3000});
-        log.debug('Video found...');
+        //await page.waitForSelector('video', {timeout: 3000});
+        //log.debug('Video found...');
         return await page.$eval('#viewport', async (el): Promise<string|null> => {
             return el.querySelector('video')?.src || null;
         });

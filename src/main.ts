@@ -258,7 +258,7 @@ Apify.main(async () => {
                             btn.click();
                         }
                     }
-                    setTimeout(f, 500);
+                    setTimeout(f, 1000);
                 };
                 setTimeout(f);
             });
