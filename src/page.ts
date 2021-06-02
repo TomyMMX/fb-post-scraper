@@ -76,7 +76,7 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
             throw new Error('Missing .userContent');
         }
 
-        window.unhideChildren(userContent);
+        //window.unhideChildren(userContent);
 
         const postText = userContent.innerText.trim();
         const images: HTMLImageElement[] = Array.from(el.querySelectorAll('img[src*="scontent"]'));
@@ -136,7 +136,7 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
                 };
             }),
             postLinks: postLinks,
-            videoPostUrl: 'https://m.facebook.com/' + videoPostUrl
+            videoPostUrl: videoPostUrl?.replace('//www.', '//m.')
         };
     });
 
