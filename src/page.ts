@@ -83,8 +83,13 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
         const links: HTMLAnchorElement[] = Array.from(el.querySelectorAll('[href*="l.facebook.com/l.php?u="]'));
         const header: HTMLElement = <HTMLElement>userContent.parentElement?.firstChild
         const avatarUrl: string | null = header?.querySelector('[role="img"]')?.getAttribute('src') || null;
-        const userName: string | null = Array.from(header?.querySelectorAll('a')).find(a => a.innerText)?.innerText || null;
-        const videoPostUrl: string | null = Array.from(header?.querySelectorAll('a')).find(a => a.href.includes('/videos/'))?.href || null;
+        const headerLinks: HTMLAnchorElement[] = Array.from(header?.querySelectorAll('a'));
+        const userName: string | null = headerLinks.find(a => a.innerText)?.innerText || null;
+        var videoPostUrl: string | null = headerLinks.find(a => a.href.includes('/videos/'))?.href || null;
+
+        if (videoPostUrl && videoPostUrl.indexOf("?") > 0) {
+            videoPostUrl = videoPostUrl.substring(0, videoPostUrl.indexOf("?")).replace('//www.', '//m.');
+        }
 
         const acc: FbPostLink[] = new Array;
         const postLinks: FbPostLink[] = links.filter(link => link.href).reduce((ret, link) => {
@@ -136,7 +141,7 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
                 };
             }),
             postLinks: postLinks,
-            videoPostUrl: videoPostUrl?.replace('//www.', '//m.')
+            videoPostUrl: videoPostUrl
         };
     });
 
