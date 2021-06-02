@@ -153,7 +153,7 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
 };
 
 export const getVideoUrl = async (page: Page, timeout: number): Promise<string|null> => {
-    await page.waitForTimeout(timeout);
+    await page.waitForTimeout(1000);
     const waitForCookiePromptHidden = async () => {
         try {
             const isHidden = await page.$eval('[data-testid="cookie-policy-dialog-accept-button"],[data-cookiebanner="accept_button"],#accept-cookie-banner-label', async (el): Promise<boolean> => {
@@ -172,6 +172,7 @@ export const getVideoUrl = async (page: Page, timeout: number): Promise<string|n
     await waitForCookiePromptHidden();
 
     await page.waitForSelector('.widePic > div > div');
+    await page.waitForTimeout(timeout);
     const playClicked = await page.$eval('.widePic > div > div', async (el): Promise<boolean> => {
         (<HTMLDivElement>el).click();
         return true;
