@@ -149,12 +149,12 @@ Apify.main(async () => {
         requestQueue,
         useSessionPool: true,
         sessionPoolOptions: {
-            maxPoolSize: 10,
+            maxPoolSize: 1000,
             sessionOptions: {
                 maxErrorScore: 0.5,
             },
         },
-        maxRequestRetries: 5,
+        maxRequestRetries: 3,
         maxConcurrency: 3,
         proxyConfiguration: proxyConfig,
         launchContext: {
