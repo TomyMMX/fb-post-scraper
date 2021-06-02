@@ -18,6 +18,7 @@ export interface FbImage {
 }
 
 export interface FbVideo {
+    postUrl: string;
     videoUrl: string;
 }
 
@@ -43,4 +44,5 @@ export interface FbPost {
     postLinks: FbPostLink[];
     name: string | null;
     logoUrl: string | null;
+    videoPostUrl: string | null;
 }

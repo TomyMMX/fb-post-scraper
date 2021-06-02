@@ -355,12 +355,8 @@ Apify.main(async () => {
 
                     await map.write(username, content);
 
-                    if (content.postImages) {
-                        for (const img of content.postImages) {
-                            if (img.link.includes('/videos/')) {
-                                await initVideoPage(img.link.replace('/www.', '/m.'), username);
-                            }
-                        }
+                    if (content.videoPostUrl) {
+                        await initVideoPage(content.videoPostUrl, username);
                     }
 
                     log.info(`Processed post in ${postTimer() / 1000}s`, { url: request.url });
@@ -371,10 +367,14 @@ Apify.main(async () => {
 
                     var videoUrl = await getVideoUrl(page);
                     await map.append(username, async (value) => {
+                        if (value) {
+                            delete value.videoPostUrl;
+                        }
                         return {
                             ... value,
                             postVideos: [
                                 {
+                                    postUrl: request.url,
                                     videoUrl: videoUrl
                                 }
                             ]

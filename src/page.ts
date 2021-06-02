@@ -67,7 +67,6 @@ export const getPostInfoFromScript = async (page: Page, url: string) => {
  */
 export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
     await page.waitForSelector(CSS_SELECTORS.POST_CONTAINER);
-    await page.waitForSelector('.userContent');
 
     const content = await page.$eval(CSS_SELECTORS.POST_CONTAINER, async (el): Promise<Partial<FbPost>> => {
         const postDate = (el.querySelector('[data-utime]') as HTMLDivElement)?.dataset?.utime;
@@ -83,8 +82,9 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
         const images: HTMLImageElement[] = Array.from(el.querySelectorAll('img[src*="scontent"]'));
         const links: HTMLAnchorElement[] = Array.from(el.querySelectorAll('[href*="l.facebook.com/l.php?u="]'));
         const header: HTMLElement = <HTMLElement>userContent.parentElement?.firstChild
-        const userImg: string | null = header?.querySelector('[role="img"]')?.getAttribute('src') || null;
+        const avatarUrl: string | null = header?.querySelector('[role="img"]')?.getAttribute('src') || null;
         const userName: string | null = Array.from(header?.querySelectorAll('a')).find(a => a.innerText)?.innerText || null;
+        const videoPostUrl: string | null = Array.from(header?.querySelectorAll('a')).find(a => a.href.includes('/videos/'))?.href || null;
 
         const acc: FbPostLink[] = new Array;
         const postLinks: FbPostLink[] = links.filter(link => link.href).reduce((ret, link) => {
@@ -126,7 +126,7 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
 
         return {
             name: userName,
-            logoUrl: userImg,
+            logoUrl: avatarUrl,
             postDate,
             postText,
             postImages: images.filter(img => img.closest('a[rel="theater"]') && img.src).map((img) => {
@@ -135,7 +135,8 @@ export const getPostContent = async (page: Page): Promise<Partial<FbPost>> => {
                     imageUrl: img.src,
                 };
             }),
-            postLinks: postLinks
+            postLinks: postLinks,
+            videoPostUrl: 'https://m.facebook.com/' + videoPostUrl
         };
     });
 
